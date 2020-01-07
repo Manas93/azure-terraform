@@ -22,7 +22,7 @@ variable "prefix" {
   default = "tfvmex"
 }
 
-variable "size" {
+variable "disk_size_mb" {
 }
 
 variable "region" {
@@ -54,5 +54,5 @@ resource "azurerm_storage_blob" "test" {
   storage_account_name   = "${azurerm_storage_account.test.name}"
   storage_container_name = "${azurerm_storage_container.test.name}"
   type                   = "page"
-  size                   = "${var.size}"
+  size                   = "${var.disk_size_mb}"
 }
