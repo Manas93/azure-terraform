@@ -18,13 +18,23 @@ variable "clientSecret" {
 variable "tenantId" {
 }
 
+variable "prefix" {
+  default = "tfvmex"
+}
+
+variable "size" {
+}
+
+variable "region" {
+}
+
 resource "azurerm_resource_group" "test" {
-  name     = "example-resources"
-  location = "West US"
+  name     = "${var.prefix}-resources"
+  location = "${var.region}"
 }
 
 resource "azurerm_storage_account" "test" {
-  name                     = "shwetatestoracc"
+  name                     = "${var.prefix}-storage"
   resource_group_name      = "${azurerm_resource_group.test.name}"
   location                 = "${azurerm_resource_group.test.location}"
   account_tier             = "Standard"
@@ -32,17 +42,17 @@ resource "azurerm_storage_account" "test" {
 }
 
 resource "azurerm_storage_container" "test" {
-  name                  = "content"
+  name                  = "${var.prefix}-content"
   resource_group_name   = "${azurerm_resource_group.test.name}"
   storage_account_name  = "${azurerm_storage_account.test.name}"
   container_access_type = "private"
 }
 
 resource "azurerm_storage_blob" "test" {
-  name                   = "my-awesome-content.zip"
+  name                   = "${var.prefix}-content.zip"
   resource_group_name    = "${azurerm_resource_group.test.name}"
   storage_account_name   = "${azurerm_storage_account.test.name}"
   storage_container_name = "${azurerm_storage_container.test.name}"
   type                   = "page"
-  size                   = "1024"
+  size                   = "${var.size}"
 }
