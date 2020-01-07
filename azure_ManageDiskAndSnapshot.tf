@@ -18,23 +18,32 @@ variable "clientSecret" {
 variable "tenantId" {
 }
 
+variable "region" {
+}
+
+variable "prefix" {
+  default = "tfazure"
+}
+
+variable "disk_size_in_gb" {
+}
 
 resource "azurerm_resource_group" "test" {
-  name     = "snapshot-rg"
-  location = "WEST US 2"
+  name     = "${var.prefix}-rg"
+  location = "${var.region}"
 }
 
 resource "azurerm_managed_disk" "test" {
-  name                 = "managed-disk"
+  name                 = "${var.prefix}-managed-disk"
   location             = "${azurerm_resource_group.test.location}"
   resource_group_name  = "${azurerm_resource_group.test.name}"
   storage_account_type = "Standard_LRS"
   create_option        = "Empty"
-  disk_size_gb         = "10"
+  disk_size_gb         = "${var.disk_size_in_gb}"
 }
 
 resource "azurerm_snapshot" "test" {
-  name                = "ani-snapshot"
+  name                = "${var.prefix}-ani-snapshot"
   location            = "${azurerm_resource_group.test.location}"
   resource_group_name = "${azurerm_resource_group.test.name}"
   create_option       = "Copy"
