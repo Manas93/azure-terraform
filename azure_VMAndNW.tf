@@ -22,9 +22,13 @@ variable "prefix" {
   default = "tfvmex"
 }
 
+variable "region" {
+}
+
+
 resource "azurerm_resource_group" "main" {
   name     = "${var.prefix}-resources"
-  location = "West US 2"
+  location = "${var.region}"
 }
 
 resource "azurerm_virtual_network" "main" {
@@ -47,7 +51,7 @@ resource "azurerm_network_interface" "main" {
   resource_group_name = "${azurerm_resource_group.main.name}"
 
   ip_configuration {
-    name                          = "testconfiguration1"
+    name                          = "testconfiguration"
     subnet_id                     = "${azurerm_subnet.internal.id}"
     private_ip_address_allocation = "Dynamic"
   }
@@ -75,7 +79,7 @@ resource "azurerm_virtual_machine" "main" {
   } 
 
 storage_os_disk {
-    name              = "myosdisk1" 
+    name              = "myosdisk" 
     caching           = "ReadWrite"
     create_option     = "FromImage"
     managed_disk_type = "Standard_LRS"
